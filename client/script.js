@@ -43,7 +43,7 @@ function chatStripe(isAi, value, uniqueId) {
     return (
         `
             <div class="wrapper ${isAi && 'ai'}">
-                <div class="chat>
+                <div class="chat">
                     <div class="profile">
                         <img 
                             src="${isAi ? bot : user}"
@@ -86,6 +86,48 @@ const handleSubmit = async (e) => {
     const messageDiv = document.getElementById(uniqueId);
 
     loader(messageDiv);
+
+    //fetch data from server and this is bot's response
+
+    const response = await fetch('http://localhost:5000', {
+        method : 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            prompt: data.get('prompt')
+        })
+    })
+
+    clearInterval(loadInterval);
+    messageDiv.innerHTML = '';
+
+    if(response.ok){
+        // const data  = await response.json();
+        // const parsedData = data.bot.trim();
+
+        // typetext(messageDiv,parsedData);
+
+        try {
+            const data = await response.json();
+            console.log(data);
+            // Check if 'bot' property exists in the response and is not null/undefined
+            if ('bot' in data && data.bot !== null) {
+                const parsedData = data.bot.trim();
+                typetext(messageDiv, parsedData);
+            } else {
+                throw new Error("Invalid response format: 'bot' property missing or null/undefined.");
+            }
+        } catch (error) {
+            messageDiv.innerHTML = "Something went wrong";
+            console.error(error);
+        }
+    }
+    else {
+        const err = await response.text();
+        messageDiv.innerHTML = "Something went wrong";
+        alert(err);
+    }
 
 }
 
