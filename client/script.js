@@ -57,15 +57,6 @@ function chatStripe(isAi, value, uniqueId) {
     )
 }
 
-/**
- * The handleSubmit function is an asynchronous function that handles form submission, adds the user's
- * chat stripe to the chat container, resets the form, generates a unique ID for the bot's chat stripe,
- * adds the bot's chat stripe to the chat container, scrolls the chat container to the bottom, and
- * displays a loader for the bot's message.
- * @param e - The parameter "e" is an event object that represents the event that triggered the form
- * submission. In this case, it is used to prevent the default form submission behavior, which would
- * cause the page to refresh.
- */
 const handleSubmit = async (e) => {
     e.preventDefault();
 
